@@ -1,0 +1,182 @@
+\documentclass[xetex,aspectratio=169]{beamer}
+
+\usepackage{res/lections}
+
+\preamble
+
+\title[История C]{История и особенности языка C и его экосистемы}
+
+\begin{document}
+
+\titleslide
+
+\tocslide
+
+\begin{frame}{Dennis Ritchie: The Development of the C Language}
+	\url{https://www.bell-labs.com/usr/dmr/www/chist.html}
+	\begin{itemize}
+		\item Сеттинг
+		\item Корни в других языках
+		\item Использование сейчас
+	\end{itemize}
+	Мы периодически будем обращаться к этому тексту
+\end{frame}
+
+\section{Мотивация}
+
+\begin{frame}{Поколения ЭВМ}
+	\begin{enumerate}
+		\item 1940е--1950е. Электромагнитные реле и радиолампы: $10^5$ вт, большие машинные залы; доступны военным и работающим на них физикам
+		\item 1950е--1960е. Полупроводники (транзисторы, диоды): $10^4$ вт, несколько стоек; доступны крупным учреждениям, банкам
+		\item 1960е--1970е. Интегральные схемы: $10^2-10^3$ вт, одна или несколько стоек; доступны небольшим учреждениям и лабораториям
+		\item 1970е--1980е--н.в. Микропроцессоры в одной интегральной схеме: $10-10^2$ вт, небольшой корпус, доступны мелким организациям, позже --- физическим лицам
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Setting}
+	\begin{block}{Common approach of 1960s}
+		\begin{itemize}
+			\item Mainframes like IBM/360 or GE-645
+			\item Programming languages like PL/I
+			\item Operating systemc like OS/360 or Multics
+			\item Batch control approach like JCL
+			\item No powerful interactive shell
+		\end{itemize}
+		Everything is complicated and heavy-weight
+	\end{block}
+\pause
+	\begin{block}{New approach of 1970s}
+	\begin{itemize}
+		\item Simpler \emph{and cheaper} mini-computers like DEC PDP-7
+		\item More universal use of them
+		\item Many computer families
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Birth of Unix}
+Killer-features of Unix:
+
+\begin{itemize}
+	\item Hierarchical file system with single tree of file names
+	\item Agnostic approach to file data: before, data was usually stored in formatted files, which offered good throughput but were complicated for software developers
+	\item Interactive powerful shell running in user space
+	\pause
+	\item And one more feature that we will describe later\ldots
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Before and After Unix}
+
+Note:
+
+\begin{itemize}
+	\item Multics already offered many of above features, but still was too complicated; minimalist design was desired
+	\item Above approaches were very good finding and they are still actual after 50 years: we see elements of such a design in such OSs as DOS and then Windows
+\end{itemize}
+
+See a pretty nice AT\&T documentary on this:
+\begin{itemize}
+	\item \url{https://youtu.be/tc4ROCJYbm0}
+\end{itemize}
+
+\end{frame}
+
+\section{Early History}
+
+\begin{frame}{Popular languages of 1960s and before}
+	\begin{itemize}
+		\item Fortran: one of the first, high-level, computational
+		\item COBOL: business-oriented language
+		\item PL/I: general purpose complicated language, suited better for systems programming than above two
+		\item Assembly languages for many computer architectures, not portable
+	\end{itemize}
+
+\pause
+
+	\begin{itemize}
+		\item \emph{All above --- not only assembly ---} were not very portable
+		\item They were not structural languages, which lead to poor quality code which was difficult to maintain due to spaghetti-code
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Birth of C}
+	\begin{itemize}
+		\item Compiled language
+		\item Structural language
+		\item Good for systems programming
+		\item Simple enough and portable
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{What is structural programming?}
+	Program consists of:
+	\begin{itemize}
+		\item Sequential blocks of operators
+		\item Loops
+		\item Branching (\mintinline{C}|if| --- \mintinline{C}|else| --- \ldots)
+		\item All above can be used withing each other
+	\end{itemize}
+	\pause
+
+	\emph{B\"{o}hm-Jecopini theorem}: above are enough to express any algorithm in sense of Turing-completeness
+	\pause
+
+	Additionally:
+	\begin{itemize}
+		\item \mintinline{C}|goto| is available but not welcome
+		\item Procedures!
+		\item Clean variable scopes (not as in Basic or Python!)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{More links to look at}
+	\begin{itemize}
+		\item Notes on Structured Programming. By Prof. Dr. Edsger W. Dijkstra — T. H. Report 70-WSK-03 Second Edition April 1970
+		\item Dijkstra: EWD 215: A Case against the GO TO Statement (PDF).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{C Predecessors}
+	\begin{itemize}
+		\item 1960: \href{https://en.wikipedia.org/wiki/ALGOL_60\#Code_sample_comparisons}{Algol-60}
+		\item 1963: \href{https://en.wikipedia.org/wiki/CPL_(programming_language)\#Example}{CPL}
+		\item 1967: \href{https://en.wikipedia.org/wiki/BCPL\#Examples}{BCPL}
+		\item 1969: \href{https://en.wikipedia.org/wiki/B_(programming_language)\#Examples}{B}
+		\item 1972: \href{https://en.wikipedia.org/wiki/C_(programming_language)\#\%22Hello,_world\%22_example}{C}
+	\end{itemize}
+\end{frame}
+
+\section{With Unix}
+
+\begin{frame}{C and Unix evolved together}
+	\begin{itemize}
+		\item C was portable (not referring any particular architecture properties)
+		\item C was simple enough to create new compiler targets quickly
+		\item C suited well for systems programming
+	\end{itemize}
+
+	\pause
+	In beginning of 1970s the majority of Unix code was re-implemented in C, which was one of the reasons of its popularity till now. Now we have it in servers, networking hardware, PCs, mobiles etc.
+\end{frame}
+
+\section{Recent History}
+
+\begin{frame}{1980s--1990s}
+	\begin{itemize}
+	\item Cheap PCs
+	\item Internet
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{1990s--2000s--now}
+	\begin{itemize}
+		\item Many mobile and embedded architectures
+		\item Parallel architectures
+	\end{itemize}
+\end{frame}
+
+\postamble
+
+\end{document}
