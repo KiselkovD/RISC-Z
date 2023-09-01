@@ -33,112 +33,111 @@
 	\end{enumerate}
 \end{frame}
 
-\begin{frame}{Setting}
-	\begin{block}{Common approach of 1960s}
+\begin{frame}{Сеттинг}
+	\begin{block}{Подход 1960-х вцелом}
 		\begin{itemize}
-			\item Mainframes like IBM/360 or GE-645
-			\item Programming languages like PL/I
-			\item Operating systemc like OS/360 or Multics
-			\item Batch control approach like JCL
-			\item No powerful interactive shell
+			\item Мэйнфреймы типа IBM/360 или GE-645
+			\item Языки программирования типа PL/I
+			\item ОС типа OS/360 или Multics
+			\item Пакетное управленеи заданиями в духе JCL
+			\item Нет универсальных интерактивных оболочек
 		\end{itemize}
-		Everything is complicated and heavy-weight
+		Всё тяжёлое, толстое и сложное
 	\end{block}
 \pause
-	\begin{block}{New approach of 1970s}
+	\begin{block}{Изменение подхода 1970-х}
 	\begin{itemize}
-		\item Simpler \emph{and cheaper} mini-computers like DEC PDP-7
-		\item More universal use of them
-		\item Many computer families
+		\item Более простые \emph{и дешёвые} миникомпьютеры типа DEC PDP-7
+		\item Более вольное их использование
+		\item Зоопарк архитектур и семейств
 	\end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}{Birth of Unix}
-Killer-features of Unix:
+\begin{frame}{Появление Unix}
+Киллер-фичи Unix:
 
 \begin{itemize}
-	\item Hierarchical file system with single tree of file names
-	\item Agnostic approach to file data: before, data was usually stored in formatted files, which offered good throughput but were complicated for software developers
-	\item Interactive powerful shell running in user space
+	\item Древовидная иерархическая файловая система
+	\item Агностический подход к данным в файлах: файлы стали просто последовательностями байтов, а раньше программисты работали с форматированными датасетами, это было часто быстрее, но сложнее
+	\item Интерактивная пользовательская командная оболочка
 	\pause
-	\item And one more feature that we will describe later\ldots
+	\item Ну и ещё там всякое, о чём позже\ldots
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Before and After Unix}
-
-Note:
+\begin{frame}{До и после Unix}
 
 \begin{itemize}
-	\item Multics already offered many of above features, but still was too complicated; minimalist design was desired
-	\item Above approaches were very good finding and they are still actual after 50 years: we see elements of such a design in such OSs as DOS and then Windows
+	\item Multics умела и предоставляла многие упомянутые возможности, но была слишком сложной, а пользователи мечтали о минимализме
+	\item Подходы Unix актуален и по прошествии 50 лет: его аспекты позже проявлялись в дизайне, например DOS и Windows
 \end{itemize}
 
-See a pretty nice AT\&T documentary on this:
+Милый документальный фильм от AT\&T:
 \begin{itemize}
 	\item \url{https://youtu.be/tc4ROCJYbm0}
 \end{itemize}
 
 \end{frame}
 
-\section{Early History}
+\section{Ранняя история}
 
-\begin{frame}{Popular languages of 1960s and before}
+\begin{frame}{Популярные языки 1960-х и ранее}
 	\begin{itemize}
-		\item Fortran: one of the first, high-level, computational
-		\item COBOL: business-oriented language
-		\item PL/I: general purpose complicated language, suited better for systems programming than above two
-		\item Assembly languages for many computer architectures, not portable
+		\item Fortran: один из первых, высокоуровневый, быстрый, вычислительный
+		\item COBOL: для деловых задач
+		\item PL/I: общего назначения, мощный и сложный, подходил для системного программирования
+		\item Языки ассемблера для разных архитектур, не переносимые
 	\end{itemize}
 
 \pause
 
 	\begin{itemize}
-		\item \emph{All above --- not only assembly ---} were not very portable
-		\item They were not structural languages, which lead to poor quality code which was difficult to maintain due to spaghetti-code
+		\item \emph{Все перечисленные --- не только языки ассемблера ---} не очень-то переносимый
+		\item Не структуррые языки, что ухудшало качество кода --- «спагетти-код» тяжело сопровождать
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Birth of C}
+\begin{frame}{Появление C}
 	\begin{itemize}
-		\item Compiled language
-		\item Structural language
-		\item Good for systems programming
-		\item Simple enough and portable
+		\item Компилируемый
+		\item Структурный
+		\item Хорош в системном программировании
+		\item Достаточно простой
+        \item Переносимый
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{What is structural programming?}
-	Program consists of:
+\begin{frame}{Что такое структурное программирование?}
+	Программа состоит из:
 	\begin{itemize}
-		\item Sequential blocks of operators
-		\item Loops
-		\item Branching (\mintinline{C}|if| --- \mintinline{C}|else| --- \ldots)
-		\item All above can be used withing each other
+		\item Блоков с последовательностью операторов
+		\item Циклов
+		\item Ветвления (\mintinline{C}|if| --- \mintinline{C}|else| --- \ldots)
+		\item Перечисленное можно комбинировать
 	\end{itemize}
 	\pause
 
-	\emph{B\"{o}hm-Jecopini theorem}: above are enough to express any algorithm in sense of Turing-completeness
+	\emph{Теорема B\"{o}hm-Jecopini}: перечисленное достаточно для того, чтобы выразить любой алгоритм в смысле полноты по Тюрингу
 	\pause
 
-	Additionally:
+	Вдобавок:
 	\begin{itemize}
-		\item \mintinline{C}|goto| is available but not welcome
-		\item Procedures!
-		\item Clean variable scopes (not as in Basic or Python!)
+		\item \mintinline{C}|goto| есть, но не приветствуется
+		\item Процедуры (функции)!
+		\item Лексическая область видимости переменных (а не как в Basic или Python!)
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{More links to look at}
+\begin{frame}{Что ещё глянуть?}
 	\begin{itemize}
 		\item Notes on Structured Programming. By Prof. Dr. Edsger W. Dijkstra — T. H. Report 70-WSK-03 Second Edition April 1970
 		\item Dijkstra: EWD 215: A Case against the GO TO Statement (PDF).
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{C Predecessors}
+\begin{frame}{Предки C}
 	\begin{itemize}
 		\item 1960: \href{https://en.wikipedia.org/wiki/ALGOL_60\#Code_sample_comparisons}{Algol-60}
 		\item 1963: \href{https://en.wikipedia.org/wiki/CPL_(programming_language)\#Example}{CPL}
@@ -148,32 +147,32 @@ See a pretty nice AT\&T documentary on this:
 	\end{itemize}
 \end{frame}
 
-\section{With Unix}
+\section{C и Unix}
 
 \begin{frame}{C and Unix evolved together}
 	\begin{itemize}
-		\item C was portable (not referring any particular architecture properties)
-		\item C was simple enough to create new compiler targets quickly
-		\item C suited well for systems programming
+		\item C был переносим (не пользовался специфической функциональностью разных архитектур)
+		\item C был достаточно прост, чтобы быстро реализовывать порождение кода для новых архитектур
+		\item C хорошо подходил для системного программирования
 	\end{itemize}
 
 	\pause
-	In beginning of 1970s the majority of Unix code was re-implemented in C, which was one of the reasons of its popularity till now. Now we have it in servers, networking hardware, PCs, mobiles etc.
+    Изначально Unix написан на языке ассемблера, но в начале 1970-х его в значительной степени переписали на C, и это до сих пор одна их причин его популярности! Сейчас Unix-подобные системы на серверах, сетевом оборудовании, ПК, мобильных устройствах и т.д.
 \end{frame}
 
-\section{Recent History}
+\section{Актуальная история}
 
 \begin{frame}{1980s--1990s}
 	\begin{itemize}
-	\item Cheap PCs
-	\item Internet
+	\item Дешёвые ПК
+	\item Интернет
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{1990s--2000s--now}
+\begin{frame}{1990s--2000s--н.в.}
 	\begin{itemize}
-		\item Many mobile and embedded architectures
-		\item Parallel architectures
+		\item Много мобильных и встроенных архитектур
+		\item Параллельные архитектуры
 	\end{itemize}
 \end{frame}
 
