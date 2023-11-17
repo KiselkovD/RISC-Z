@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.25)
 project(RISC-Z)
 
+set(CMAKE_GENERATOR "Unix Makefiles")
+# set(CMAKE_GENERATOR "Ninja")
+
 set(CMAKE_DEBUG_POSTFIX d)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -13,6 +16,6 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
     add_compile_definitions(NDEBUG)
 endif(CMAKE_BUILD_TYPE MATCHES Release)
 
-set(SRC_LIST main.c risc-z.c memory.c ecall.c)
+set(SRC_LIST main.c cpu.c memory.c ecall.c)
 
 add_executable(risc-z ${SRC_LIST})

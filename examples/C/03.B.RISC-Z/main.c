@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "risc-z.h"
+#include "cpu.h"
 
 int main()
 {
