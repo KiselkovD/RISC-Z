@@ -20,3 +20,7 @@ Newer
 
 https://github.com/61c-teach/venus
 https://github.com/61c-teach/venus/wiki/Environmental-Calls
+
+RISC-V Instruction Encoding
+
+https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf page 104

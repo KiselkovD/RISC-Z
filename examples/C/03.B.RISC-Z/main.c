@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "cpu.h"
+#include "memory.h"
 
-int main()
+int main(int argc, const char *argv[])
 {
     #ifdef DEBUG
     puts("DEBUG");
@@ -13,5 +14,13 @@ int main()
 
     puts("Hello, World!");
     printf("CPU Info: %s\n", cpuinfo());
+
+    // load dumps
+    FILE *code_file = fopen(argv[1], "rb");
+    fread(mem_access(TEXT_OFFSET), 1, TEXT_SIZE, code_file);
+    fclose(code_file);
+
+    cycle();
+
     return 0;
 }

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(RISC-Z)
 
-set(CMAKE_GENERATOR "Unix Makefiles")
+# set(CMAKE_GENERATOR "Unix Makefiles")
 # set(CMAKE_GENERATOR "Ninja")
 
 set(CMAKE_DEBUG_POSTFIX d)
