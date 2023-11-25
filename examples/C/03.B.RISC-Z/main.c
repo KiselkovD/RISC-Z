@@ -20,7 +20,7 @@ int main(int argc, const char *argv[])
     fread(mem_access(TEXT_OFFSET), 1, TEXT_SIZE, code_file);
     fclose(code_file);
 
-    cycle();
+    while(rz_cycle());
 
     return 0;
 }

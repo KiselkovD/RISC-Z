@@ -1,11 +1,10 @@
 #ifndef __CPU_H__
 #define __CPU_H__
 
+#include <stdbool.h>
+
 const char *cpuinfo(void);
 
-void cycle();
-
-// OPCODES
-#define OP_ADD 0b0110011
+bool rz_cycle();
 
 #endif // CPU_H__
