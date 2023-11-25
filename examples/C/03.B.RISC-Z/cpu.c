@@ -1,11 +1,12 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
 #include "misc.h"
 #include "cpu.h"
 #include "memory.h"
-
-rz_register_t r_pc, r_x[32];
 
 #define FUNC3_OFFS 12
 #define FUNC7_OFFS 24
@@ -117,21 +118,43 @@ typedef union {
     } j;
 } rz_instruction_t;
 
-const char *cpuinfo(void)
+struct rz_cpu_s {
+    const char *info;
+    rz_register_t r_pc, r_x[32];
+};
+
+const char *rz_cpu_info(const rz_cpu_p pcpu)
 {
-    return "RISC-Z.32.2023";
+    return pcpu->info;
 }
 
-bool rz_r_cycle(rz_instruction_t instr) {
+rz_cpu_p rz_create_cpu(void){
+    rz_cpu_p pcpu = malloc(sizeof(rz_cpu_t));
+    pcpu->info = "RISC-Z.32.2023";
+
+    pcpu->r_pc = TEXT_OFFSET;
+
+    memset(pcpu->r_x, 0, sizeof(pcpu->r_x));
+    pcpu->r_x[2] = STACK_OFFSET + STACK_SIZE - sizeof(rz_register_t); // sp
+    pcpu->r_x[3] = DATA_OFFSET; // gp
+
+    return pcpu;
+}
+
+void rz_free_cpu(rz_cpu_p pcpu){
+    free(pcpu);
+}
+
+bool rz_r_cycle(rz_cpu_p pcpu, rz_instruction_t instr) {
     switch(instr.whole & (OPCODE_MASK | FUNC3_MASK | FUNC7_MASK)) {
         case ADD_CODE:
-            r_x[instr.r.rd] = r_x[instr.r.rs1] + r_x[instr.r.rs2];
+            pcpu->r_x[instr.r.rd] = pcpu->r_x[instr.r.rs1] + pcpu->r_x[instr.r.rs2];
         break;
         case SUB_CODE:
-            r_x[instr.r.rd] = r_x[instr.r.rs1] - r_x[instr.r.rs2];
+            pcpu->r_x[instr.r.rd] = pcpu->r_x[instr.r.rs1] - pcpu->r_x[instr.r.rs2];
         break;
         case XOR_CODE:
-            r_x[instr.r.rd] = r_x[instr.r.rs1] ^ r_x[instr.r.rs2];
+            pcpu->r_x[instr.r.rd] = pcpu->r_x[instr.r.rs1] ^ pcpu->r_x[instr.r.rs2];
         break;
         default:
             return false;
@@ -139,13 +162,20 @@ bool rz_r_cycle(rz_instruction_t instr) {
     return true;
 }
 
-bool rz_i_cycle(rz_instruction_t instr) {
+static inline rz_register_t sign_extend(unsigned some_bits, int how_many_bits) {
+    rz_register_t result = some_bits;
+    if(1 << (how_many_bits - 1) & result) // then negative
+        result |= -1 << how_many_bits; // -1 is full of 1s
+    return result;
+}
+
+bool rz_i_cycle(rz_cpu_p pcpu, rz_instruction_t instr) {
     switch(instr.whole & (OPCODE_MASK | FUNC3_MASK)) {
         case ADDI_CODE:
-            r_x[instr.i.rd] = r_x[instr.i.rs1] + instr.i.imm0_11;
+            pcpu->r_x[instr.i.rd] = pcpu->r_x[instr.i.rs1] + sign_extend(instr.i.imm0_11, 12);
         break;
         case SLLI_CODE:
-            r_x[instr.i.rd] = r_x[instr.i.rs1] << instr.r.rs2;
+            pcpu->r_x[instr.i.rd] = pcpu->r_x[instr.i.rs1] << instr.r.rs2;
         break;
         break;
         default:
@@ -154,7 +184,7 @@ bool rz_i_cycle(rz_instruction_t instr) {
     return true;
 }
 
-bool rz_sys_cycle(rz_instruction_t instr) {
+bool rz_sys_cycle(rz_cpu_p pcpu, rz_instruction_t instr) {
     switch(instr.whole & (1u << 20)){
         case 0:
             return true; // return rz_ecall();
@@ -164,28 +194,27 @@ bool rz_sys_cycle(rz_instruction_t instr) {
     }
 }
 
-bool rz_cycle() {
-    rz_instruction_t instr = *((rz_instruction_t *)mem_access(r_pc));
-    r_pc += sizeof(rz_instruction_t);
+bool rz_cycle(rz_cpu_p pcpu) {
+    pcpu->r_x[0] = 0u;
+    rz_instruction_t instr = *((rz_instruction_t *)mem_access(pcpu->r_pc));
+    bool goon = true;
 
     switch(instr.whole & OPCODE_MASK) {
         case R_FORMAT:
-            return rz_r_cycle(instr);
+            goon = rz_r_cycle(pcpu, instr);
         break;
         case I_FORMAT:
-            return rz_i_cycle(instr);
+            goon = rz_i_cycle(pcpu, instr);
         break;
         case L_FORMAT:
         break;
         case S_FORMAT:
         break;
         case LUI_FORMAT:
-            r_x[instr.u.rd] = (instr.u.imm12_31 << 12) | (r_x[instr.u.rd] & 0b111111111111);
-            return true;
+            pcpu->r_x[instr.u.rd] = instr.u.imm12_31 << 12;
         break;
         case AUIPC_FORMAT:
-            r_x[instr.u.rd] += (instr.u.imm12_31 << 12);
-            return true;
+            pcpu->r_x[instr.u.rd] = (instr.u.imm12_31 << 12) + pcpu->r_pc;
         break;
 
         case J_FORMAT:
@@ -196,11 +225,12 @@ bool rz_cycle() {
         case MEM_FORMAT:
         break;
         case SYS_FORMAT:
-            return rz_sys_cycle(instr);
+            goon = rz_sys_cycle(pcpu, instr);
         break;
         default:
             fprintf(stderr, "Invalid instruction %08X format, opcode %08X\n", instr.whole, instr.whole & OPCODE_MASK);
-            return false;
+            goon = false;
     }
-    return true;
+    pcpu->r_pc += sizeof(rz_instruction_t);
+    return goon;
 }
