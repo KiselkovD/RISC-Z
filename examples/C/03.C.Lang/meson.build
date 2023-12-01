@@ -11,7 +11,7 @@ endif
 
 minipeg_gen = generator(find_program('minipeg'),
   output  : '@BASENAME@.c',
-  arguments : ['-o@OUTPUT@', '@INPUT@']
+  arguments : ['-o', '@OUTPUT@', '@INPUT@']
 )
 minipeg_gen_src = minipeg_gen.process('basic.peg')
 
