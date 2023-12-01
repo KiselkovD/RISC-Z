@@ -1,6 +1,6 @@
 # A 'syntax-directed interpreter' (all execution is a side-effect of parsing).
 # Inspired by Dennis Allison's original Tiny BASIC grammar, circa 1975.
-# 
+#
 # Copyright (c) 2007 by Ian Piumarta
 # All rights reserved.
 # 
@@ -359,6 +359,4 @@ void do_basic(int argc, char **argv)
 
   while (!feof(stdin))
     yyparse();
-
-  return 0;
 }
