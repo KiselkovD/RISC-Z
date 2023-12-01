@@ -3,14 +3,14 @@
 
 #include "misc.h"
 
-#define TEXT_SIZE (1 << 14)
-#define TEXT_OFFSET 0
+#define TEXT_SIZE (1UL << 14)
+#define TEXT_OFFSET 0UL
 
-#define DATA_SIZE (1 << 14)
-#define DATA_OFFSET 0x10000000
+#define DATA_SIZE (1UL << 14)
+#define DATA_OFFSET 0x10000000UL
 
-#define STACK_SIZE (1 << 14)
-#define STACK_OFFSET 0x7FFFFF00
+#define STACK_SIZE (1UL << 14)
+#define STACK_OFFSET 0x7FFFFF00UL
 
 /**
  * @brief ...
