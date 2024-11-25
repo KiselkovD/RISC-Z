@@ -72,4 +72,4 @@ jobs:
         run: |
           cd 01.GetOpt_Argp
           chmod u+x argp_example
-          ./argp_example
+          ./argp_example --help
