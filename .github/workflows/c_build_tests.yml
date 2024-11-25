@@ -39,14 +39,14 @@ jobs:
 
       - name: Собираем программу
         run: |
-          cd examples/C/01.Argp
+          cd examples/C/01.GetOpt_Argp
           clang -o argp_example argp_example.c
 
       - name: Сохраняем результаты билда для тестирования
         uses: actions/upload-artifact@v4
         with:
           name: argp_example
-          path: ${{ github.workspace }}/examples/C/01.Argp
+          path: ${{ github.workspace }}/examples/C/01.GetOpt_Argp
 
   test:
     # Зависимости
@@ -64,12 +64,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: argp_example
-          path: ${{ github.workspace }}/examples/C/01.Argp
+          path: 01.GetOpt_Argp
 
       # Да, оно не исполнимое после загрузки
       # См. https://github.com/actions/upload-artifact/issues/38
       - name: Запускаем тестирование (допустим =))
         run: |
-          cd prog1
-          chmod u+x prog1_executable
-          ./prog1_executable
+          cd 01.GetOpt_Argp
+          chmod u+x argp_example
+          ./argp_example
