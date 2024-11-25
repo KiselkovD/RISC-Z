@@ -1,0 +1,4 @@
+[submodule "examples/C/XX.C_Programming_Examples"]
+	path = examples/C/XX.C_Programming_Examples
+	url = https://github.com/dluciv/c-programming-CB.5161.git
+	branch = main
