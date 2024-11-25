@@ -135,7 +135,7 @@ rz_cpu_p rz_create_cpu(void){
     pcpu->r_pc = TEXT_OFFSET;
 
     memset(pcpu->r_x, 0, sizeof(pcpu->r_x));
-    pcpu->r_x[2] = STACK_OFFSET + STACK_SIZE - sizeof(rz_register_t); // sp
+    pcpu->r_x[2] = STACK_OFFSET + STACK_SIZE - (unsigned) sizeof(rz_register_t); // sp
     pcpu->r_x[3] = DATA_OFFSET; // gp
 
     return pcpu;

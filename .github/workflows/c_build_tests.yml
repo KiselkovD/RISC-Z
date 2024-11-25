@@ -1,0 +1,75 @@
+# Что за Workflow
+name: Build
+
+# Когда он запускается
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Позволяет вручную запускать Workflow
+  workflow_dispatch:
+
+jobs:
+  setup_and_build:
+    name: Настройка и запуск билда
+    # Контейнер, в котором запускается задание
+    runs-on: ubuntu-latest
+
+    # Шаги задания
+    steps:
+      - name: Печать окружения. Окружение — это интересно.
+        run: env
+
+      # Егор Тенсин кстати учился на Матмехе СПбГУ
+      - name: Установка Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+
+      - name: Установка make и некоторых других инструментов
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential
+
+      - name: Берём исходники из Гита
+        uses: actions/checkout@v4
+
+      - name: Собираем программу
+        run: |
+          cd examples/C/01.Argp
+          clang -o argp_example argp_example.c
+
+      - name: Сохраняем результаты билда для тестирования
+        uses: actions/upload-artifact@v4
+        with:
+          name: argp_example
+          path: ${{ github.workspace }}/examples/C/01.Argp
+
+  test:
+    # Зависимости
+    needs:
+      - setup_and_build
+
+    name: Тестирование
+
+    # Контейнер, в котором запускается задание
+    runs-on: ubuntu-latest
+
+    # Шаги задания
+    steps:
+      - name: Загружаем результаты билда для тестирования
+        uses: actions/download-artifact@v4
+        with:
+          name: argp_example
+          path: ${{ github.workspace }}/examples/C/01.Argp
+
+      # Да, оно не исполнимое после загрузки
+      # См. https://github.com/actions/upload-artifact/issues/38
+      - name: Запускаем тестирование (допустим =))
+        run: |
+          cd prog1
+          chmod u+x prog1_executable
+          ./prog1_executable
