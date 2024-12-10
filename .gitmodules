@@ -2,3 +2,7 @@
 	path = examples/C/XX.C_Programming_Examples
 	url = https://github.com/dluciv/c-programming-CB.5161.git
 	branch = main
+[submodule "examples/C/YY.utest"]
+	path = examples/C/YY.utest
+	url = https://github.com/sheredom/utest.h.git
+	branch = main

@@ -31,17 +31,28 @@ image_p create_image(pixel_coord width, pixel_coord height);
 
 void fill_random(image_p picture);
 
+void clear_image(image_p picture);
+
 void free_image(image_p picture);
 
 int save_pgm(image_p picture, const char *filename);
 
 /**
  * @brief Set the pixel of an image to given color
- * 
+ *
  * @param picture Image
  * @param x,y Pixel coordinates
  * @param color Color value
  */
 void set_pixel(image_p picture, pixel_coord x, pixel_coord y, pixel_data color);
+
+/**
+ * @brief Get the pixel of an image
+ *
+ * @param picture Image
+ * @param x,y Pixel coordinates
+ * @returns pixel Color value
+ */
+pixel_data get_pixel(image_p picture, pixel_coord x, pixel_coord y);
 
 #endif // _IMAGE_H_

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include "image.h"
 
@@ -19,8 +20,12 @@ image_p create_image(pixel_coord width, pixel_coord height)
     v->height = height;
     v->data = malloc(sizeof(pixel_data) * width * height);
 
-
     return v;
+}
+
+void clear_image(image_p picture)
+{
+    memset(picture->data, 0, sizeof(pixel_data) * picture->width * picture->height);
 }
 
 void fill_random(image_p picture)
@@ -54,4 +59,10 @@ void set_pixel(image_p picture, pixel_coord x, pixel_coord y, pixel_data color)
 {
     assert(("Out of dimension", x >= 0 && y >= 0 && x < picture->width && y < picture->height));
     picture->data[picture->width * y + x] = color;
+}
+
+pixel_data get_pixel(image_p picture, pixel_coord x, pixel_coord y)
+{
+    assert(("Out of dimension", x >= 0 && y >= 0 && x < picture->width && y < picture->height));
+    return picture->data[picture->width * y + x];
 }

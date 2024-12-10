@@ -9,13 +9,17 @@ program : release
 
 # test target too
 
-release : CCOPT += -O3 -DNDEBUG
-debug   : CCOPT += -g -DDEBUG
+release   : CCOPT += -O3 -DNDEBUG
+debug     : CCOPT += -g -DDEBUG
+debug_test: CCOPT += -g -DDEBUG
 
-release : main.o image.o fractal.o
+release    : main.o      image.o fractal.o
 	$(LD) -o $@ $^
 
-debug   : main.o image.o fractal.o
+debug      : main.o      image.o fractal.o
+	$(LD) -o $@ $^
+
+debug_test : test_main.o image.o fractal.o
 	$(LD) -o $@ $^
 
 clean :
@@ -23,7 +27,7 @@ clean :
 	- rm *.hdrdep.bak
 
 cleanall : clean
-	- rm release debug
+	- rm release debug debug_test
 	- echo > makefile.hdrdep
 
 mrproper : cleanall
